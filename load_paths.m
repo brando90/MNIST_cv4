@@ -23,6 +23,7 @@ addpath('../../hbf_research_ml_model_library/RBF_multivariant_regression');
 % addpath('../../../common')
 % addpath('../../../common/MNIST')
 % addpath('../../../common/kernel_functions')
+%
 folderName = fullfile('../../hbf_research_ml_model_library/common');
 p = genpath(folderName);
 addpath(p);
