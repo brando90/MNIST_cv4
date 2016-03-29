@@ -150,11 +150,13 @@ test_error_HBF1 = compute_Hf_sq_error(X_test,y_test, best_iteration_mdl, best_it
 best_iteration_mdl = best_iteration_mdl.gather();
 kernel_mdl = kernel_mdl.gather();
 %% save everything/write errors during iterations
-[s,git_hash_string] = system('git rev-parse HEAD')
+[s,git_hash_string_mnist_cv4] = system('git -C . rev-parse HEAD')
+[s,git_hash_string_hbf_research_data] = system('git -C ../../hbf_research_data rev-parse HEAD')
+[s,git_hash_string_hbf_research_ml_model_library] = system('git -C ../../hbf_research_ml_model_library rev-parse HEAD')
 vname=@(x) inputname(1);
 error_iterations_file_name = sprintf('test_error_vs_iterations%d',task_id);
 path_error_iterations = sprintf('%s%s',results_path,error_iterations_file_name)
-save(path_error_iterations, vname(best_train),vname(best_test), vname(center), vname(iterations), vname(eta_c), vname(eta_t), vname(best_iteration_mdl), vname(kernel_mdl), vname(rand_seed), vname(git_hash_string) );
+save(path_error_iterations, vname(best_train),vname(best_test), vname(center), vname(iterations), vname(eta_c), vname(eta_t), vname(best_iteration_mdl), vname(kernel_mdl), vname(rand_seed), vname(git_hash_string_mnist_cv4), vname(git_hash_string_hbf_research_data), vname(git_hash_string_hbf_research_ml_model_library) );
 %% write results to file
 result_file_name = sprintf('results_om_id%d.m',task_id);
 results_path
