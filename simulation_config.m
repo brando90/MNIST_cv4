@@ -1,6 +1,6 @@
 gau_precision = 0.5
-num_inits = 2
-iterations = int64(20)
+num_inits = 1
+iterations = int64(10)
 % train_func_name = 'learn_HBF1_SGD'
 % mdl_func_name = 'HBF1'
 %train_func_name = 'learn_RBF_SGD'
@@ -8,23 +8,38 @@ iterations = int64(20)
 train_func_name = 'learn_HReLu_SGD'
 mdl_func_name = 'HReLu'
 lambda = 0
-eta_c = 0.1
-eta_t = 0.1
+eta_c = 0.5
+eta_t = 0.5
 visualize = 0
 sgd_errors = 1
 %% locations
-cp_folder = 'cp_26mar_ht_HReLu1/'
-cp_param_files_names = 'cp_26mar_ht_HReLu1_%d.m'
-results_path = './results/r_26mar_ht_HReLu1/'
+cp_folder = 'cp_26mar_ht_HReLu2/'
+cp_param_files_names = 'cp_26mar_ht_HReLu2_%d.m'
+results_path = './results/r_26mar_ht_HReLu2/'
 %% jobs
 jobs = 2
-start_centers = 5
-end_centers = 10
+start_centers = 10
+end_centers = 250
 %% data
 data_set_path = '../../hbf_research_data/data_MNIST_0.7_0.15_0.15_49000_10500_10500.mat'
 data_normalized = 0
 %% GPU
 gpu_on = 0
-%% inits
-rbf_as_initilization = 0
+%% t_initilization
+t_initilization = 't_random_data_points' %datasample(X_train', K, 'Replace', false)';
+%t_initilization = 't_zeros_plus_eps' %normrnd(0,epsilon,[K,D]);
+
+%epsilon = 0.1;
+%t_initilization = 't_random_data_points_treat_offset_special' %-normrnd(epsilon*t_mean - epsilon*t_std, t_std);
+%% c_initilization
+c_initilization = 'c_kernel_mdl_as_initilization' % c_init = kernel_mdl.c;
+
+%epsilon = 0.01;
+%c_initilization = 'c_normal_zeros_plus_eps' %normrnd(0,epsilon,[K,D_out]);
+
+%c_initilization = 'c_normal_ymean_ystd' %normrnd(y_mean,y_std,[K,D_out]);
+%c_initilization = 'c_uniform_random_centered_ymean_std_ystd' %(y_std + y_std) .* rand(K,D_out) + y_mean;
+%c_initilization = 'c_uniform_random_centered_ymean_std_min_max_y' %(max_y - min_y) .* rand(K,D_out) + y_mean;
+%c_initilization = 'c_hard_coded_c_init' %(1 + 1)*rand(K,D_out) - 1
+%% normalized
 c_init_normalized = 0
