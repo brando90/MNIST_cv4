@@ -3,6 +3,9 @@ if strcmp( train_func_name, 'learn_HBF1_SGD')
     folderName = fullfile('../../hbf_research_ml_model_library/HBF1_multivariant_regression');
     p = genpath(folderName);
     addpath(p);
+    folderName = fullfile('../../hbf_research_ml_model_library/RBF_multivariant_regression');
+    p = genpath(folderName);
+    addpath(p);
 elseif strcmp( train_func_name, 'learn_RBF_SGD')
     folderName = fullfile('../../hbf_research_ml_model_library/RBF_multivariant_regression');
     p = genpath(folderName);
@@ -16,7 +19,6 @@ elseif strcmp( train_func_name, 'learn_HReLu_SGD')
     p = genpath(folderName);
     addpath(p);
 end
-addpath('../../hbf_research_ml_model_library/RBF_multivariant_regression');
 % addpath('../../../common/squared_error_risk');
 % addpath('../../../common/visualize_centers')
 % addpath('../../../common/cross_validation/standard_train_cv_test_validation')

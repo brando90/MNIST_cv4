@@ -49,8 +49,8 @@ y_std = std(y_train,0,2); % (D_out x 1) unbiased std of coordinate/var/feature
 y_mean = mean(y_train,2); % (D_out x 1) mean of coordinate/var/feature
 y_std = repmat( y_std', [K,1]); % (K x D_out) for c = (K x D_out)
 y_mean = repmat( y_mean', [K,1]); % (K x D_out) for c = (K x D_out)  
-%min_y = min(y_train);
-%max_y = max(y_train, 2);
+min_y = min(y_train);
+max_y = max(y_train);
 %% tracking best mdl
 error_best_mdl_on_cv = inf;
 best_H_mdl = -1;
@@ -84,11 +84,11 @@ for initialization_index=1:num_inits
     case 'c_kernel_mdl_as_initilization'
         switch train_func_name
             case 'learn_HBF1_SGD'
-                kernel_mdl = RBF(c_init,t_init,gau_precision, lambda);
+                kernel_mdl = RBF(c_init,t_init,gau_precision, best_H_mdl.lambda);
                 kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
                 c_init = kernel_mdl.c;
             case 'learn_RBF_SGD'
-                kernel_mdl = RBF(c_init,t_init,gau_precision, lambda);
+                kernel_mdl = RBF(c_init,t_init,gau_precision, best_H_mdl.lambda);
                 kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
                 c_init = kernel_mdl.c;
             case 'learn_HSig_SGD'
@@ -117,8 +117,7 @@ for initialization_index=1:num_inits
     case 'c_uniform_random_centered_ymean_std_ystd'
         c_init = (y_std + y_std) .* rand(K,D_out) + y_mean;
     case 'c_uniform_random_centered_ymean_std_min_max_y'
-        %c_init = repmat(max_y - min_y,[K,1]) .* rand(K,D_out) + repmat(y_mean,[K,1]);
-        error('TODO');
+        c_init = (max_y - min_y) .* rand(K,D_out) + y_mean;
     case 'c_hard_coded_c_init'
         c_init = (1 + 1)*rand(K,D_out) - 1;
     otherwise

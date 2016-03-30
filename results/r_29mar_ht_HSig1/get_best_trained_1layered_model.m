@@ -2,13 +2,11 @@ function [] = get_best_trained_1layered_model(slurm_job_id, task_id)
 restoredefaultpath
 slurm_job_id
 task_id
-%% load the path to configs for this simulation
 run('./simulation_config.m');
 run('load_paths.m');
-%% load most of the configs for this model
+%% load configs
 current_simulation_config = sprintf( './changing_params/%s%s', cp_folder, 'simulation_config.m' )
 run(current_simulation_config);
-%% load the number of centers for this model
 changing_params_for_current_task = sprintf( sprintf('./changing_params/%s%s',cp_folder,cp_param_files_names), task_id )
 run(changing_params_for_current_task);
 %% load data set
@@ -49,8 +47,8 @@ y_std = std(y_train,0,2); % (D_out x 1) unbiased std of coordinate/var/feature
 y_mean = mean(y_train,2); % (D_out x 1) mean of coordinate/var/feature
 y_std = repmat( y_std', [K,1]); % (K x D_out) for c = (K x D_out)
 y_mean = repmat( y_mean', [K,1]); % (K x D_out) for c = (K x D_out)  
-%min_y = min(y_train);
-%max_y = max(y_train, 2);
+min_y = min(y_train);
+max_y = max(y_train);
 %% tracking best mdl
 error_best_mdl_on_cv = inf;
 best_H_mdl = -1;
@@ -65,7 +63,6 @@ for initialization_index=1:num_inits
         t_init = normrnd(0,epsilon_t,[D,K]); % (D x K)
     case 't_random_data_points_treat_offset_special'
         %if we used normal data points all the offsets would be 1 since x=[x,1]. To avoid that we treat offset as a bit less than average inner product   
-        t_init = datasample(X_train', K, 'Replace', false)'; % (D x K)
         t_mean  = norm(mean(t_init(1:D-1,:) ,2),2)^2;
         t_std = norm(std(t_init(1:D-1,:),0,2),2)^2;
         t_init(D,:) =  - normrnd(epsilon_t*t_mean - epsilon_t*t_std, t_std); % (1 x K)
@@ -84,11 +81,11 @@ for initialization_index=1:num_inits
     case 'c_kernel_mdl_as_initilization'
         switch train_func_name
             case 'learn_HBF1_SGD'
-                kernel_mdl = RBF(c_init,t_init,gau_precision, lambda);
+                kernel_mdl = RBF(c_init,t_init,gau_precision, best_H_mdl.lambda);
                 kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
                 c_init = kernel_mdl.c;
             case 'learn_RBF_SGD'
-                kernel_mdl = RBF(c_init,t_init,gau_precision, lambda);
+                kernel_mdl = RBF(c_init,t_init,gau_precision, best_H_mdl.lambda);
                 kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
                 c_init = kernel_mdl.c;
             case 'learn_HSig_SGD'
@@ -111,14 +108,13 @@ for initialization_index=1:num_inits
                 error('The train function you gave: %s does not exist', train_func_name);
          end
     case 'c_normal_zeros_plus_eps'
-        c_init = normrnd(0,epsilon_c,[K,D_out]); % (K x D_out)
+        c_init = normrnd(0,epsilon_c,[K,D_out]); % (D_out x K)
     case 'c_normal_ymean_ystd'
-        c_init = normrnd(y_mean,y_std,[K,D_out]); % (K x D_out)
+        c_init = normrnd(y_mean,y_std,[K,D_out]); % (D_out x K)
     case 'c_uniform_random_centered_ymean_std_ystd'
         c_init = (y_std + y_std) .* rand(K,D_out) + y_mean;
     case 'c_uniform_random_centered_ymean_std_min_max_y'
-        %c_init = repmat(max_y - min_y,[K,1]) .* rand(K,D_out) + repmat(y_mean,[K,1]);
-        error('TODO');
+        c_init = (max_y - min_y) .* rand(K,D_out) + y_mean;
     case 'c_hard_coded_c_init'
         c_init = (1 + 1)*rand(K,D_out) - 1;
     otherwise
@@ -163,7 +159,7 @@ if gpu_on
     c_init = gpuArray(c_init);
     t_init = gpuArray(t_init);
 end
-switch train_func_name % get KERNEL MODEL
+switch train_func_name
     case 'learn_HBF1_SGD'
         kernel_mdl = RBF(c_init,t_init,gau_precision, best_H_mdl.lambda);
         kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
