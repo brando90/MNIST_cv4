@@ -84,11 +84,11 @@ for initialization_index=1:num_inits
     case 'c_kernel_mdl_as_initilization'
         switch train_func_name
             case 'learn_HBF1_SGD'
-                kernel_mdl = RBF(c_init,t_init,gau_precision, lambda);
+                kernel_mdl = RBF(c_init,t_init,gau_precision, best_H_mdl.lambda);
                 kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
                 c_init = kernel_mdl.c;
             case 'learn_RBF_SGD'
-                kernel_mdl = RBF(c_init,t_init,gau_precision, lambda);
+                kernel_mdl = RBF(c_init,t_init,gau_precision, best_H_mdl.lambda);
                 kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
                 c_init = kernel_mdl.c;
             case 'learn_HSig_SGD'

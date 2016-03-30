@@ -9,11 +9,11 @@ eta_t = 0.5
 visualize = 0
 sgd_errors = 1
 %% locations
-train_func_name = 'learn_HBF1_SGD'
-mdl_func_name = 'HBF1'
-cp_folder = 'cp_29mar_ht2_HBF1/'
-cp_param_files_names = 'cp_29mar_ht2_HBF1_%d.m'
-results_path = './results/r_29mar_ht2_HSig1/'
+% train_func_name = 'learn_HBF1_SGD'
+% mdl_func_name = 'HBF1'
+% cp_folder = 'cp_29mar_ht1_HBF1/'
+% cp_param_files_names = 'cp_29mar_ht1_HBF1_%d.m'
+% results_path = './results/r_29mar_ht1_HSig1/'
 
 % train_func_name = 'learn_HSig_SGD'
 % mdl_func_name = 'HSig'
@@ -21,11 +21,11 @@ results_path = './results/r_29mar_ht2_HSig1/'
 % cp_param_files_names = 'cp_29mar_ht2_HSig_%d.m'
 % results_path = './results/r_29mar_ht2_HSig/'
 
-% train_func_name = 'learn_HReLu_SGD'
-% mdl_func_name = 'HReLu'
-% cp_folder = 'cp_29mar_ht2_HReLu/'
-% cp_param_files_names = 'cp_29mar_ht2_HReLu_%d.m'
-% results_path = './results/r_29mar_ht2_HReLu/'
+train_func_name = 'learn_HReLu_SGD'
+mdl_func_name = 'HReLu'
+cp_folder = 'cp_29mar_ht2_HReLu/'
+cp_param_files_names = 'cp_29mar_ht2_HReLu_%d.m'
+results_path = './results/r_29mar_ht2_HReLu/'
 %% jobs
 jobs = 2
 start_centers = 10
@@ -36,13 +36,13 @@ data_normalized = 0
 %% GPU
 gpu_on = 0
 %% t_initilization
-t_initilization = 't_random_data_points' %datasample(X_train', K, 'Replace', false)';
+%t_initilization = 't_random_data_points' %datasample(X_train', K, 'Replace', false)';
 
 %epsilon_t = 0.01;
 %t_initilization = 't_zeros_plus_eps' %normrnd(0,epsilon,[K,D]);
 
-%epsilon_t = 0.1;
-%t_initilization = 't_random_data_points_treat_offset_special' %-normrnd(epsilon*t_mean - epsilon*t_std, t_std);
+epsilon_t = 0.1;
+t_initilization = 't_random_data_points_treat_offset_special' %-normrnd(epsilon*t_mean - epsilon*t_std, t_std);
 %% c_initilization
 c_initilization = 'c_kernel_mdl_as_initilization' % c_init = kernel_mdl.c;
 
