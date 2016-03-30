@@ -13,7 +13,7 @@ train_func_name = 'learn_HBF1_SGD'
 mdl_func_name = 'HBF1'
 cp_folder = 'cp_29mar_ht2_HBF1/'
 cp_param_files_names = 'cp_29mar_ht2_HBF1_%d.m'
-results_path = './results/r_29mar_ht2_HSig1/'
+results_path = './results/r_29mar_ht2_HBF1/'
 
 % train_func_name = 'learn_HSig_SGD'
 % mdl_func_name = 'HSig'
