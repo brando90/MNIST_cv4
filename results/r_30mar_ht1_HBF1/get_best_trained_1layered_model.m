@@ -85,11 +85,16 @@ for initialization_index=1:num_inits
         switch train_func_name
             case 'learn_HBF1_SGD'
                 kernel_mdl = RBF(c_init,t_init,gau_precision, lambda);
-                kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
-                c_init = kernel_mdl.c;
+                %similarity_matrix = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
+                similarity_matrix = produce_kernel_matrix(X_train, kernel_mdl.t, kernel_mdl.beta); % (N x K)
+                C = similarity_matrix \ y_train';  % (K x D) = (N x K)' x (N x D)
+                kernel_mdl.c = C; % (K x D)
             case 'learn_RBF_SGD'
                 kernel_mdl = RBF(c_init,t_init,gau_precision, lambda);
-                kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
+                %similarity_matrix = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
+                similarity_matrix = produce_kernel_matrix(X_train, kernel_mdl.t, kernel_mdl.beta); % (N x K)
+                C = similarity_matrix \ y_train';  % (K x D) = (N x K)' x (N x D)
+                kernel_mdl.c = C; % (K x D)
                 c_init = kernel_mdl.c;
             case 'learn_HSig_SGD'
                 kernel_mdl = HSig(c_init,t_init,lambda);
@@ -166,10 +171,19 @@ end
 switch train_func_name % get KERNEL MODEL
     case 'learn_HBF1_SGD'
         kernel_mdl = RBF(c_init,t_init,gau_precision, best_H_mdl.lambda);
-        kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
+        %kernel_mdl = RBF(c_init,t_init,gau_precision, lambda);
+        %similarity_matrix = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
+        similarity_matrix = produce_kernel_matrix(X_train, kernel_mdl.t, kernel_mdl.beta); % (N x K)
+        C = similarity_matrix \ y_train';  % (K x D) = (N x K)' x (N x D)
+        kernel_mdl.c = C; % (K x D)
     case 'learn_RBF_SGD'
         kernel_mdl = RBF(c_init,t_init,gau_precision, best_H_mdl.lambda);
-        kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
+        %kernel_mdl = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
+        %kernel_mdl = RBF(c_init,t_init,gau_precision, lambda);
+        %similarity_matrix = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
+        similarity_matrix = produce_kernel_matrix(X_train, kernel_mdl.t, kernel_mdl.beta); % (N x K)
+        C = similarity_matrix \ y_train';  % (K x D) = (N x K)' x (N x D)
+        kernel_mdl.c = C; % (K x D)
     case 'learn_HSig_SGD'
         kernel_mdl = HSig(c_init,t_init,lambda);
         similarity_matrix = X_train' * kernel_mdl.t; % (N x K)

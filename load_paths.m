@@ -1,9 +1,10 @@
 disp(train_func_name)
 if strcmp( train_func_name, 'learn_HBF1_SGD')
+%     folderName = fullfile('../../hbf_research_ml_model_library/RBF_multivariant_regression');
+%     p = genpath(folderName);
+%     addpath(p);
+    addpath('../../hbf_research_ml_model_library/RBF_multivariant_regression'); %only adds the RBF class
     folderName = fullfile('../../hbf_research_ml_model_library/HBF1_multivariant_regression');
-    p = genpath(folderName);
-    addpath(p);
-    folderName = fullfile('../../hbf_research_ml_model_library/RBF_multivariant_regression');
     p = genpath(folderName);
     addpath(p);
 elseif strcmp( train_func_name, 'learn_RBF_SGD')
