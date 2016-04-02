@@ -34,7 +34,7 @@ end_centers = 250
 data_set_path = '../../hbf_research_data/data_MNIST_0.7_0.15_0.15_49000_10500_10500.mat'
 data_normalized = 0
 %% GPU
-gpu_on = 0
+gpu_on = 1
 %% t_initilization
 t_initilization = 't_random_data_points' %datasample(X_train', K, 'Replace', false)';
 
