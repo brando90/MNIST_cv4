@@ -89,6 +89,7 @@ for initialization_index=1:num_inits
                 similarity_matrix = produce_kernel_matrix(X_train, kernel_mdl.t, kernel_mdl.beta); % (N x K)
                 C = similarity_matrix \ y_train';  % (K x D) = (N x K)' x (N x D)
                 kernel_mdl.c = C; % (K x D)
+                c_init = kernel_mdl.c;
             case 'learn_RBF_SGD'
                 kernel_mdl = RBF(c_init,t_init,gau_precision, lambda);
                 %similarity_matrix = learn_RBF_linear_algebra( X_train, y_train, kernel_mdl);
