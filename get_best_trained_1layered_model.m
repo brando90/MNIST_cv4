@@ -132,16 +132,16 @@ for initialization_index=1:num_inits
     switch train_func_name
     case 'learn_HBF1_SGD'
         mdl = HBF1(c_init,t_init,gau_precision,lambda);
-        [ mdl, errors_train, errors_test ] = learn_HBF1_SGD( X_train, y_train, mdl, iterations,visualize, X_test,y_test, eta_c,eta_t, sgd_errors);
+        [ mdl, iteration_errors_train, iteration_errors_test ] = learn_HBF1_SGD( X_train, y_train, mdl, iterations,visualize, X_test,y_test, eta_c,eta_t, sgd_errors);
     case 'learn_RBF_SGD'
         mdl = RBF(c_init,t_init,gau_precision,lambda);
-        [ mdl, errors_train, errors_test ] = learn_RBF_SGD( X_train, y_train, mdl, iterations,visualize, X_test,y_test, eta_c, sgd_errors);
+        [ mdl, iteration_errors_train, iteration_errors_test ] = learn_RBF_SGD( X_train, y_train, mdl, iterations,visualize, X_test,y_test, eta_c, sgd_errors);
     case 'learn_HSig_SGD'
         mdl = HSig(c_init,t_init,lambda);
-        [ mdl, errors_train, errors_test ] = learn_HSig_SGD( X_train, y_train, mdl, iterations,visualize, X_test,y_test, eta_c, eta_t, sgd_errors);
+        [ mdl, iteration_errors_train, iteration_errors_test ] = learn_HSig_SGD( X_train, y_train, mdl, iterations,visualize, X_test,y_test, eta_c, eta_t, sgd_errors);
     case 'learn_HReLu_SGD'
         mdl = HReLu(c_init,t_init,lambda);
-        [ mdl, errors_train, errors_test ] = learn_HReLu_SGD( X_train, y_train, mdl, iterations,visualize, X_test,y_test, eta_c, eta_t, sgd_errors);
+        [ mdl, iteration_errors_train, iteration_errors_test ] = learn_HReLu_SGD( X_train, y_train, mdl, iterations,visualize, X_test,y_test, eta_c, eta_t, sgd_errors);
     otherwise
        error('The train function you gave: %s does not exist', train_func_name);
     end
@@ -150,8 +150,8 @@ for initialization_index=1:num_inits
     if error_mdl_new_on_cv < error_best_mdl_on_cv
         best_H_mdl = mdl;
         error_best_mdl_on_cv = error_mdl_new_on_cv;
-        best_train_error_H_mdl = errors_train;
-        best_test_error_H_mdl = errors_test;
+        best_train_iteration_errors_H_mdl = iteration_errors_train;
+        best_test_iteration_errors_H_mdl = iteration_errors_test;
         %c_best = c_init;
         %t_best = t_init;
     end
@@ -201,7 +201,7 @@ kernel_mdl = kernel_mdl.gather();
 vname=@(x) inputname(1);
 error_iterations_file_name = sprintf('test_error_vs_iterations%d',task_id);
 path_error_iterations = sprintf('%s%s',results_path,error_iterations_file_name)
-save(path_error_iterations, vname(best_train_error_H_mdl),vname(best_test_error_H_mdl), vname(center), vname(iterations), vname(eta_c), vname(eta_t), vname(best_H_mdl), vname(kernel_mdl), vname(rand_seed), vname(git_hash_string_mnist_cv4), vname(git_hash_string_hbf_research_data), vname(git_hash_string_hbf_research_ml_model_library) );
+save(path_error_iterations, vname(best_train_iteration_errors_H_mdl),vname(best_test_iteration_errors_H_mdl), vname(center), vname(iterations), vname(eta_c), vname(eta_t), vname(best_H_mdl), vname(kernel_mdl), vname(rand_seed), vname(git_hash_string_mnist_cv4), vname(git_hash_string_hbf_research_data), vname(git_hash_string_hbf_research_ml_model_library) );
 %% write results to file
 result_file_name = sprintf('results_om_id%d.m',task_id);
 results_path
