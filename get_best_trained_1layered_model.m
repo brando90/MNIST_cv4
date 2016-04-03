@@ -47,6 +47,8 @@ K = center;
 %% statistics for initilizations preparation
 y_std = std(y_train,0,2); % (D_out x 1) unbiased std of coordinate/var/feature
 y_mean = mean(y_train,2); % (D_out x 1) mean of coordinate/var/feature
+% mean(y_mean)
+% mean(y_std)
 y_std = repmat( y_std', [K,1]); % (K x D_out) for c = (K x D_out)
 y_mean = repmat( y_mean', [K,1]); % (K x D_out) for c = (K x D_out)  
 %min_y = min(y_train);
@@ -138,7 +140,7 @@ for initialization_index=1:num_inits
     switch train_func_name
     case 'learn_HBF1_SGD'
         mdl = HBF1(c_init,t_init,gau_precision,lambda);
-        [ mdl, iteration_errors_train, iteration_errors_test ] = learn_HBF1_SGD( X_train, y_train, mdl, iterations,visualize, X_test,y_test, eta_c,eta_t, sgd_errors);
+        [ mdl, iteration_errors_train, iteration_errors_test ] = learn_HBF1_SGD( X_train, y_train, mdl, iterations,visualize, X_test,y_test, eta_c,eta_t,eta_beta, sgd_errors);
     case 'learn_RBF_SGD'
         mdl = RBF(c_init,t_init,gau_precision,lambda);
         [ mdl, iteration_errors_train, iteration_errors_test ] = learn_RBF_SGD( X_train, y_train, mdl, iterations,visualize, X_test,y_test, eta_c, sgd_errors);
