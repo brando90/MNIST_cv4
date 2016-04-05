@@ -1,5 +1,5 @@
 %% errors vs centers
-results_fold = 'r_1apr_omt10_HBF1'; %<---- CHANGE
+results_fold = 'r_4apr_omt1_HBF1'; %<---- CHANGE
 path_to_results = sprintf('../results/%s/', results_fold);
 num_models = 5;
 fig = plot_errors_vs_centers_results( path_to_results, num_models )
